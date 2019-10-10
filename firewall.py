@@ -1,3 +1,7 @@
+# Author: Cody
+# Date: October 9th, 2019
+# Illumio Coding Challenge
+
 from intervaltree import IntervalTree, Interval
 from  ipaddress import ip_interface
 import pprint
@@ -5,6 +9,7 @@ import csv
 
 class Firewall:
 	def __init__(self, path):
+		''' Initialize a firewall with rules from a CSV '''
 		self.rules = {}
 		with open(path, mode='r', encoding='utf-8-sig') as csvfile:
 			reader = csv.reader(csvfile)
@@ -14,6 +19,7 @@ class Firewall:
 				self._create_rule(direction, protocol, port, ip_address)
 	
 	def _parse_row(self, direction_str, protocol_str, port_str, ip_address_str):
+		''' Parse rule attributes into relevant data type representations ''' 
 		direction = direction_str
 		protocol = protocol_str
 		port = port_str
@@ -30,6 +36,7 @@ class Firewall:
 			
 
 	def _create_rule(self, direction, protocol, port, ip_address):
+		''' Add rule row to query-able data object ''' 
 		if direction in self.rules:
 			if protocol in self.rules[direction]:
 				if ip_address in self.rules[direction][protocol]:
@@ -49,6 +56,7 @@ class Firewall:
 			self.rules[direction] = {protocol: {ip_address: interval_tree}}
 			
 	def _create_interval_tree(self, int_or_tuple):
+		''' Create an interval tree for querying port range '''
 		tree = IntervalTree()
 		if isinstance(int_or_tuple, int):
 			tree.add(Interval(int_or_tuple, int_or_tuple+1)) # non inclusive on upper
@@ -57,6 +65,7 @@ class Firewall:
 		return tree
 
 	def accept_packet(self, direction, protocol, port, ip_address):
+		''' Determine whether a packet's characteristics align with a rule '''
 		if direction not in self.rules:
 			return False
 		if protocol not in self.rules[direction]:
