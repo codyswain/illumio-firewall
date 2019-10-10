@@ -1,26 +1,45 @@
 Installation:
+--------------------------------------------------------------------------
+pip install requirements.txt
+python3 firewall.py
 
-# The spec says that the function accept_packet should take an int for the port
-# but the input spec specifies that the port may be either an int [1, 65535] or
-# range separated by a dash. I changed the port arg in accept_packet to str
-# to accomodate for this.
 
-# First I considered the naive solution, where I create a list of every rule, and
-# check each incoming rule against the whole list which has O(N) complexity if
-# n is the number of rules
+Testing:
+--------------------------------------------------------------------------
+Due to time constraints, I didn't spend time testing the performance of my program. 
+However, I implemented a few pass / no pass test cases, and made sure to check edge
+cases such as ports and ip addresses at the edge of the (inclusive) ranges.
 
-# Instead of attempting to implement the naive solution, I brainstormed how you
-# could optimize the querying process. If ranges weren't present, it'd be
-# trivial to hash rules and achieve O(1) time complexity (with O(N) space complexity)
+Code Choice:
+--------------------------------------------------------------------------
+After scanning the spec, my first thought was to implement a naive solution,
+where a list is created at class construction, and iterated through each time. 
+This would lead to extremely innefficient querying when accept_packet() is called. 
 
-# I had two other ideas that seemed like they could have potential, each with their
-# own weaknesses. The first would be to create a seperate database, which would allow
-# SQL's optimized query, but also take O(N) space. The alternative would be to create a
-# rolling pandas dataframe across a window of csv rows... probably an even worse solution
+My next thought was to try and figure out how to implement some hash map storage of
+rules upon intializing the class, but I was stumped by how to incorporate queryable 
+ranges into the mix. One solution I had was to create a list of tuples and checking the lower
+and upper bounds. 
 
-# Finally I decided upon building a sort of decision tree, which I implement using nested
-# hash maps. I found a pretty great Python module for dealing with intervals, and
-# create an interval tree for ports, which reduces the dimensionality of the search place
-# significantly.
+Finally, I looked around on Google and stumbled upon the interval trees, a data structure
+built to combine overlapping ranges and query them — perfect for this application. Since both
+port and ip address inputs may be ranges, I had to decide how to organize the search space. I chose
+to make ip address a key in a hash, because
 
-# This solution stores everything in RAM
+Optimization:
+--------------------------------------------------------------------------
+While I was happy with my hacked together solution, I noticed that the constructor stores
+all the rules in RAM, which could potentially be problematic given a large enough rule set. A solution
+would be to use a SQL database and and execute a query each time you want to whether a packet may pass.
+
+When looking online I saw some papers which discussed a Structured Firewall Query Language (SFQL) 
+https://www.cs.utexas.edu/~gouda/FirewallQueries.pdf, which I'd look into more before implementing a 
+production ready firewall. 
+
+Area / Team of Interest: 
+--------------------------------------------------------------------------
+I'm really interested in working on the Data Team, and I believe my past experience best aligns with this.
+
+I look forward to hearing back! 
+
+
