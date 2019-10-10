@@ -24,7 +24,7 @@ and upper bounds.
 Finally, I looked around on Google and stumbled upon the interval trees, a data structure
 built to combine overlapping ranges and query them — perfect for this application. Since both
 port and ip address inputs may be ranges, I had to decide how to organize the search space. I chose
-to make ip address a key in a hash, because
+to make ip address a key in a hash, because it is less prone to collisons than port. 
 
 Optimization:
 --------------------------------------------------------------------------
