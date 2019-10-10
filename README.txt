@@ -30,7 +30,7 @@ Optimization:
 --------------------------------------------------------------------------
 While I was happy with my hacked together solution, I noticed that the constructor stores
 all the rules in RAM, which could potentially be problematic given a large enough rule set. A solution
-would be to use a SQL database and and execute a query each time you want to whether a packet may pass.
+would be to use a SQL database and and execute a query each time you want to check whether a packet may pass.
 
 When looking online I saw some papers which discussed a Structured Firewall Query Language (SFQL) 
 https://www.cs.utexas.edu/~gouda/FirewallQueries.pdf, which I'd look into more before implementing a 
