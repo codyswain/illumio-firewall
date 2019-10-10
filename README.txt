@@ -24,13 +24,13 @@ and upper bounds.
 Finally, I looked around on Google and stumbled upon the interval trees, a data structure
 built to combine overlapping ranges and query them — perfect for this application. Since both
 port and ip address inputs may be ranges, I had to decide how to organize the search space. I chose
-to make ip address a key in a hash, because
+to make ip address a key in a hash, because it is less prone to collisons than port. 
 
 Optimization:
 --------------------------------------------------------------------------
 While I was happy with my hacked together solution, I noticed that the constructor stores
 all the rules in RAM, which could potentially be problematic given a large enough rule set. A solution
-would be to use a SQL database and and execute a query each time you want to whether a packet may pass.
+would be to use a SQL database and and execute a query each time you want to check whether a packet may pass.
 
 When looking online I saw some papers which discussed a Structured Firewall Query Language (SFQL) 
 https://www.cs.utexas.edu/~gouda/FirewallQueries.pdf, which I'd look into more before implementing a 
